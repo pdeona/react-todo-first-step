@@ -1,0 +1,73 @@
+{
+  "parser": "babel-eslint",
+  "extends": [
+    "airbnb",
+    "plugin:react/recommended",
+    "plugin:flowtype/recommended"
+  ],
+  "env": {
+    "browser": true,
+    "node": true,
+    "jest": true,
+    "es6": true
+  },
+  "plugins": [
+    "react",
+    "flowtype"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "rules": {
+    "no-param-reassign": "off",
+    "function-paren-newline": "off",
+    "arrow-parens": [
+      "error",
+      "as-needed"
+    ],
+    "arrow-body-style": [
+      2,
+      "as-needed"
+    ],
+    "comma-dangle": [
+      "error",
+      "only-multiline"
+    ],
+    "import/no-extraneous-dependencies": 0,
+    "indent": [
+      2,
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "max-len": 0,
+    "no-console": [1, { "allow": ["warn", "error"] }],
+    "no-extend-native": [2, { "exceptions": ["Number"] }],
+    "no-nested-ternary": 0,
+    "semi": [
+      "error",
+      "never"
+    ],
+    "react/forbid-prop-types": 0,
+    "react/jsx-curly-brace-presence": "off",
+    "react/jsx-first-prop-new-line": [
+      2,
+      "multiline"
+    ],
+    "react/jsx-filename-extension": 0,
+    "react/self-closing-comp": 0,
+    "jsx-a11y/anchor-is-valid": 0
+  },
+  "settings": {
+    "import/resolver": {
+      "webpack": {
+        "config": "./config/webpack.prod.babel.js"
+      }
+    }
+  }
+}
