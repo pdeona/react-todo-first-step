@@ -11,9 +11,8 @@
   ],
   "env": {
     "production": {
-      "only": ["app"],
+      "only": ["src"],
       "plugins": [
-        "transform-class-properties",
         "transform-react-remove-prop-types",
         "transform-react-constant-elements",
         "transform-react-inline-elements"
@@ -22,7 +21,6 @@
     "test": {
       "plugins": [
         "transform-es2015-modules-commonjs",
-        "transform-class-properties",
         "dynamic-import-node"
       ]
     }

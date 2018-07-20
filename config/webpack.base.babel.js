@@ -12,7 +12,6 @@ module.exports = options => ({
   entry: options.entry,
   output: Object.assign({ // Compile into js/build.js
     path: path.resolve(process.cwd(), 'build'),
-    publicPath: '/src/',
   }, options.output), // Merge with env dependent settings
   module: {
     rules: [
@@ -93,20 +92,12 @@ module.exports = options => ({
     tls: 'empty'
   },
   plugins: options.plugins.concat([
-    new webpack.ContextReplacementPlugin(/\.\/locale$/, null, false, /js$/),
-    new webpack.ProvidePlugin({
-      // make fetch available
-      fetch: 'exports-loader?self.fetch!whatwg-fetch'
-    }),
-
     // Always expose NODE_ENV to webpack, in order to use `process.env.NODE_ENV`
     // inside your code for any environment checks; UglifyJS will automatically
     // drop any unreachable code.
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-        FIREBASE_API_KEY: JSON.stringify(process.env.FIREBASE_API_KEY),
-        FIREBASE_SENDER_ID: JSON.stringify(process.env.FIREBASE_SENDER_ID),
       },
     }),
   ]),
