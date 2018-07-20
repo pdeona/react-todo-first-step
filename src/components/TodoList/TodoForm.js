@@ -44,6 +44,7 @@ class TodoForm extends PureComponent<FormProps, FormState> {
             className="new-todo-input"
           />
         </label>
+        <button type="submit">add</button>
       </form>
     )
   }

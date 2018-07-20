@@ -8,6 +8,12 @@ type AppState = {|
   todos: Array<TodoType>
 |}
 
+type CountFn<T> = (list: Array<T>, predicate: (listItem: T) => boolean) => number
+const count: CountFn<any> = (list, predicate) => list.reduce(
+  (acc, item) => (predicate(item) ? acc + 1 : acc),
+  0,
+)
+
 class App extends PureComponent<any, AppState> {
   state: AppState = {
     todos: [],
@@ -29,9 +35,11 @@ class App extends PureComponent<any, AppState> {
       todo,
       newStatus,
     )
+    const updateTodos = existing => (existing.id === todo.id
+      ? newTodo
+      : existing)
     const newTodos: Array<TodoType> = this.state.todos
-      .filter((existing: TodoType): boolean => (existing.id !== todo.id))
-      .concat(newTodo)
+      .map(updateTodos)
 
     this.setState(state => ({
       ...state,
@@ -50,6 +58,11 @@ class App extends PureComponent<any, AppState> {
           onRemoveTodo={this.removeTodo}
           onCompleteTodo={this.completeTodo}
         />
+        <span className="status-text">
+          Total: {todos.length}
+          <br />
+          Completed: {count(todos, todo => !!todo.completed)}
+        </span>
       </div>
     )
   }
