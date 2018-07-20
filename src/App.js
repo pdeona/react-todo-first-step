@@ -20,12 +20,10 @@ class App extends PureComponent<any, AppState> {
   }
 
   addTodo = (todo: TodoType): void => this.setState(state => ({
-    ...state,
     todos: state.todos.concat(todo),
   }))
 
   removeTodo = (todoID: number): void => this.setState(state => ({
-    ...state,
     todos: state.todos.filter((todo: TodoType): boolean => todo.id !== todoID)
   }))
 
@@ -41,8 +39,7 @@ class App extends PureComponent<any, AppState> {
     const newTodos: Array<TodoType> = this.state.todos
       .map(updateTodos)
 
-    this.setState(state => ({
-      ...state,
+    this.setState(() => ({
       todos: newTodos,
     }))
   }

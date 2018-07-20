@@ -1,10 +1,8 @@
 // @flow
 import React, { PureComponent } from 'react'
 
-type $FormData = any
-
 type FormProps = {
-  onSubmit: (data: $FormData) => void,
+  onSubmit: (data: string) => void,
 }
 
 type FormState = {
