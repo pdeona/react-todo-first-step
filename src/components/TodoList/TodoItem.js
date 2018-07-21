@@ -17,7 +17,7 @@ const Todo = ({ todo, onCompleted, onRemove }: TodoProps) => (
   <div className="todo-item">
     <p>{todo.text}</p>
     <label htmlFor={todo.id}>
-      <input id={todo.id} type="checkbox" defaultChecked={todo.completed} onClick={onCompleted} />
+      <input id={todo.id} type="checkbox" checked={todo.completed} onClick={onCompleted} />
       Completed
     </label>
     <button onClick={onRemove}>Remove</button>

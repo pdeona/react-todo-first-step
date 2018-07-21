@@ -13,6 +13,7 @@ type TodoListProps = {|
   onAddTodo: (todo: TodoType) => void,
   onRemoveTodo: (todoID: number) => void,
   onCompleteTodo: (todo: TodoType) => void,
+  onResetTodos: () => void,
 |}
 
 const newTodo = (text: string): TodoType => ({
@@ -20,6 +21,12 @@ const newTodo = (text: string): TodoType => ({
   text,
   completed: false,
 })
+
+type Predicate<T> = (item: T) => boolean
+const count = <K>(list: Array<K>, predicate: Predicate<K>): number => list.reduce(
+  (acc, item: K): number => (predicate(item) ? acc + 1 : acc),
+  0,
+)
 
 class TodoList extends PureComponent<TodoListProps> {
   onSubmitTodo: (text: string) => void = compose(this.props.onAddTodo, newTodo)
@@ -39,12 +46,18 @@ class TodoList extends PureComponent<TodoListProps> {
     ))
 
   render() {
-    const { todos } = this.props
+    const { todos, onResetTodos } = this.props
 
     return (
       <div className="todo-container">
         <NewTodoForm onSubmit={this.onSubmitTodo} />
         {this.renderTodos(todos)}
+        <span className="status-text">
+          Total: {todos.length}
+          <br />
+          Completed: {count(todos, (todo: TodoType): boolean => !!todo.completed)}
+        </span>
+        <button onClick={onResetTodos}>Reset List</button>
       </div>
     )
   }
