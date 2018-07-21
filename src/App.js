@@ -8,9 +8,9 @@ type AppState = {|
   todos: Array<TodoType>
 |}
 
-type CountFn<T> = (list: Array<T>, predicate: (listItem: T) => boolean) => number
-const count: CountFn<any> = (list, predicate) => list.reduce(
-  (acc, item) => (predicate(item) ? acc + 1 : acc),
+type Predicate<T> = (item: T) => boolean
+const count = <K>(list: Array<K>, predicate: Predicate<K>): number => list.reduce(
+  (acc, item: K): number => (predicate(item) ? acc + 1 : acc),
   0,
 )
 
@@ -58,7 +58,7 @@ class App extends PureComponent<any, AppState> {
         <span className="status-text">
           Total: {todos.length}
           <br />
-          Completed: {count(todos, todo => !!todo.completed)}
+          Completed: {count(todos, (todo: TodoType): boolean => !!todo.completed)}
         </span>
       </div>
     )
