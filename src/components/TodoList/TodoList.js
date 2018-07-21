@@ -25,12 +25,14 @@ class TodoList extends PureComponent<TodoListProps> {
 
   onRemoveTodo = (todoID: number) => () => this.props.onRemoveTodo(todoID)
 
+  onCompleteTodo = (todo: TodoType) => () => this.props.onCompleteTodo(todo)
+
   renderTodos = (todos: Array<TodoType>): Array<Element<typeof Todo>> =>
     todos.map(todo => (
       <Todo
         key={todo.id}
         todo={todo}
-        onCompleted={this.props.onCompleteTodo}
+        onCompleted={this.onCompleteTodo(todo)}
         onRemove={this.onRemoveTodo(todo.id)}
       />
     ))
