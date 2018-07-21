@@ -1,7 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react'
-import TodoList from './components/TodoList'
-import type { TodoType } from './components/TodoList'
+import TodoList from 'components/TodoList'
+import type { TodoType } from 'components/TodoList'
 import './App.css'
 
 type AppState = {|

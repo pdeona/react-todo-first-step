@@ -5,6 +5,7 @@ import compose from 'lodash/fp/compose'
 import NewTodoForm from './TodoForm'
 import Todo from './TodoItem'
 import type { TodoType } from './TodoItem'
+// $FlowIssue For some reason scss import is messing up flow type
 import './style.scss'
 
 type TodoListProps = {|
