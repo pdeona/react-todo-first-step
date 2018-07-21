@@ -14,9 +14,9 @@ class TodoForm extends PureComponent<FormProps, FormState> {
     text: '',
   }
 
-  onChangeText = ({ target: { value } }: SyntheticInputEvent<HTMLInputElement>) => this.setState({
+  onChangeText = ({ target: { value } }: SyntheticInputEvent<HTMLInputElement>) => this.setState(() => ({
     text: value,
-  })
+  }))
 
   onSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault()
