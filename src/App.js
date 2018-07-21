@@ -8,6 +8,15 @@ type AppState = {|
   todos: Array<TodoType>
 |}
 
+type Updater<T> = (item: T) => T
+type TodoUpdater = Updater<TodoType>
+
+const flipCompleted: TodoUpdater = item => ({
+  id: item.id,
+  text: item.text,
+  completed: !item.completed,
+})
+
 type Predicate<T> = (item: T) => boolean
 const count = <K>(list: Array<K>, predicate: Predicate<K>): number => list.reduce(
   (acc, item: K): number => (predicate(item) ? acc + 1 : acc),
@@ -28,20 +37,14 @@ class App extends PureComponent<any, AppState> {
   }))
 
   completeTodo = (todo: TodoType): void => {
-    const newStatus: {| completed: boolean |} = { completed: !todo.completed }
-    const newTodo: TodoType = Object.assign(
-      todo,
-      newStatus,
-    )
-    const updateTodos = existing => (existing.id === todo.id
-      ? newTodo
+    const updateTodos: TodoUpdater = existing => (existing.id === todo.id
+      ? flipCompleted(existing)
       : existing)
-    const newTodos: Array<TodoType> = this.state.todos
-      .map(updateTodos)
+    const newTodosState: (state: AppState) => AppState = state => ({
+      todos: state.todos.map(updateTodos)
+    })
 
-    this.setState(() => ({
-      todos: newTodos,
-    }))
+    this.setState(newTodosState)
   }
 
   render() {
