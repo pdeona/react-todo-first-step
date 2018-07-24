@@ -7,8 +7,7 @@ import TodoList from 'containers/TodoList'
 import './App.css'
 
 const store = configureStore()
-
-const App: () => Element<*> = () => (
+const App = (): Element<*> => (
   <Provider store={store}>
     <div className="App">
       <TodoList />

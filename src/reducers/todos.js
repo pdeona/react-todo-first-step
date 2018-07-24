@@ -1,35 +1,57 @@
 // @flow
 import { List } from 'immutable'
-import createReducer from 'util/createReducer'
-import type { Reducer } from 'util/createReducer'
-import type { TodoType } from 'components/TodoList'
-import type { TodoAction } from 'actions/todos'
+import type { TodoType, Predicate } from 'components/TodoList'
+import type { Action, Reducer, TodoState } from 'actions/types'
 
-type TodoState = List<TodoType>
 const initialState: TodoState = new List()
 
-type UpdateTodos = (todo: TodoType) => TodoType
+type UpdateTodo = (todo: TodoType) => TodoType
+type FilterTodo = Predicate<TodoType>
 
-const handlers: { [key: TodoAction]: Reducer<TodoState, TodoAction> } = {
-  ADDED_TODO: (state, { payload }) => state.push(payload),
-  REMOVED_TODO: (state, { payload }) => {
-    const removeTodo = (todo: TodoType): boolean => (payload !== todo.id)
-    return state.filter(removeTodo)
-  },
-  COMPLETED_TODO: (state, { payload }) => {
-    const newTodo = Object.assign({}, payload, { completed: !payload.completed })
-    const updateTodos: UpdateTodos = todo => (todo.id === payload.id
-      ? newTodo
-      : todo)
+const flipCompleted: UpdateTodo = todo => ({
+  id: todo.id,
+  text: todo.text,
+  completed: !todo.completed,
+})
 
-    return state.map(updateTodos)
-  },
-  RESET_TODOS: () => initialState,
-}
-
-const todosReducer: Reducer<TodoState, TodoAction> = createReducer(
-  initialState,
-  handlers,
+/**
+ * [Flow]
+ *  setCompleted: ({
+ *    payload: number,
+ *    type: "COMPLETED_TODO"
+ *  }) => UpdateTodo
+ */
+const setCompleted = ({ payload }: *): UpdateTodo => todo => (
+  todo.id === payload
+    ? flipCompleted(todo)
+    : todo
 )
+
+/**
+ * [Flow]
+ *  removeSelected: ({
+ *    payload: number,
+ *    type: "REMOVED_TODO"
+ *  }) => FilterTodo
+ */
+const removeSelected = ({ payload }: *): FilterTodo => todo => (
+  todo.id !== payload
+)
+
+const todosReducer: Reducer<TodoState, Action> =
+  (state = initialState, action) => {
+    switch (action.type) {
+      case 'ADDED_TODO':
+        return state.push(action.payload)
+      case 'REMOVED_TODO':
+        return state.filter(removeSelected(action))
+      case 'COMPLETED_TODO':
+        return state.map(setCompleted(action))
+      case 'RESET_TODOS':
+        return initialState
+      default:
+        return state
+    }
+  }
 
 export default todosReducer

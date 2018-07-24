@@ -1,15 +1,25 @@
 /**
  * Create the store with dynamic reducers
  */
+// @flow
 import { createStore, applyMiddleware, compose } from 'redux'
 import { combineReducers } from 'redux-immutable'
-import { fromJS } from 'immutable'
+import { Record, List } from 'immutable'
 // import createSagaMiddleware from 'redux-saga'
 import logger from 'redux-logger'
 import todosReducer from 'reducers/todos'
 
+const InitialState = Record({
+  todos: new List(),
+})
+
+// type AppStore = {
+//   ...$ReadOnly<$Call<typeof createStore, Object, Object>>,
+//   injectedReducers: Object,
+// }
+
 // const sagaMiddleware = createSagaMiddleware()
-export default function configureStore(initialState = {}) {
+export default function configureStore(initialState: Object = {}) {
   // Store middleware:
   //   - sagaMiddleware: Makes redux-sagas work
   const middlewares = [
@@ -43,7 +53,7 @@ export default function configureStore(initialState = {}) {
 
   const store = createStore(
     combineReducers(injectedReducers),
-    fromJS(initialState),
+    new InitialState(initialState),
     composeEnhancers(...enhancers)
   )
 

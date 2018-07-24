@@ -1,17 +1,16 @@
 // @flow
 import { createSelector } from 'reselect'
-import type { InputSelector } from 'reselect'
-import type { TodoType } from 'components/TodoList'
-import type { AppState } from 'util/createReducer'
-import type { List } from 'immutable'
+import type { OutputSelector } from 'reselect'
+import type { AppState, TodoState } from 'actions/types'
 
-const rootSelect: (state: AppState) => List = state => state.get('todos')
+type TodoSelector = (state: AppState) => TodoState
+const rootSelect: TodoSelector = state => state.get('todos')
 
-type MakeSelectTodos = () => InputSelector<AppState, *, Array<TodoType>>
+type MakeSelectTodos = () => OutputSelector<*, AppState, Array<*>>
 
 const makeSelectTodos: MakeSelectTodos = () => createSelector(
   rootSelect,
-  (todos: List): Array<TodoType> => todos.toJS(),
+  (todos: TodoState): Array<*> => todos.toJS(),
 )
 
 export default makeSelectTodos

@@ -8,11 +8,11 @@ import type { TodoType } from './TodoItem'
 // $FlowIssue For some reason scss import is messing up flow type
 import './style.scss'
 
-type TodoListProps = {|
+export type TodoListProps = {|
   todos: Array<TodoType>,
   onAddTodo: (todo: TodoType) => void,
   onRemoveTodo: (todoID: number) => void,
-  onCompleteTodo: (todo: TodoType) => void,
+  onCompleteTodo: (todoID: number) => void,
   onResetTodos: () => void,
 |}
 
@@ -22,9 +22,11 @@ const newTodo = (text: string): TodoType => ({
   completed: false,
 })
 
-type Predicate<T> = (item: T) => boolean
-const count = <K>(list: Array<K>, predicate: Predicate<K>): number => list.reduce(
-  (acc, item: K): number => (predicate(item) ? acc + 1 : acc),
+export type Predicate<T> = (item: T) => boolean
+type CountFn<K> = (list: Array<K>, predicate: Predicate<K>) => number
+
+const count: CountFn<*> = (list, predicate) => list.reduce(
+  (acc, item) => (predicate(item) ? acc + 1 : acc),
   0,
 )
 
@@ -33,14 +35,14 @@ class TodoList extends PureComponent<TodoListProps> {
 
   onRemoveTodo = (todoID: number) => () => this.props.onRemoveTodo(todoID)
 
-  onCompleteTodo = (todo: TodoType) => () => this.props.onCompleteTodo(todo)
+  onCompleteTodo = (todoID: number) => () => this.props.onCompleteTodo(todoID)
 
   renderTodos = (todos: Array<TodoType>): Array<Element<typeof Todo>> =>
     todos.map(todo => (
       <Todo
         key={todo.id}
         todo={todo}
-        onCompleted={this.onCompleteTodo(todo)}
+        onCompleted={this.onCompleteTodo(todo.id)}
         onRemove={this.onRemoveTodo(todo.id)}
       />
     ))
@@ -55,7 +57,7 @@ class TodoList extends PureComponent<TodoListProps> {
         <span className="status-text">
           Total: {todos.length}
           <br />
-          Completed: {count(todos, (todo: TodoType): boolean => !!todo.completed)}
+          Completed: {count(todos, todo => !!todo.completed)}
         </span>
         <button onClick={onResetTodos}>Reset List</button>
       </div>

@@ -1,32 +1,22 @@
 // @flow
 import type { TodoType } from 'components/TodoList'
+import type { Action } from './types'
 
-type AddTodoAction = { type: 'ADDED_TODO', payload: TodoType }
-type RemoveTodoAction = { type: 'REMOVED_TODO', payload: string }
-type CompleteTodoAction = { type: 'COMPLETED_TODO', payload: TodoType }
-type ResetTodosAction = { type: 'RESET_TODOS' }
-
-export type TodoAction =
-  | AddTodoAction
-  | RemoveTodoAction
-  | CompleteTodoAction
-  | ResetTodosAction
-
-export const addTodo: (todo: TodoType) => AddTodoAction = todo => ({
+export const addTodo = (todo: TodoType): Action => ({
   type: 'ADDED_TODO',
   payload: todo,
 })
 
-export const removeTodo: (todoID: string) => RemoveTodoAction = todoID => ({
+export const removeTodo = (todoID: number): Action => ({
   type: 'REMOVED_TODO',
   payload: todoID,
 })
 
-export const completeTodo: (todo: TodoType) => CompleteTodoAction = todo => ({
+export const completeTodo = (todoID: number): Action => ({
   type: 'COMPLETED_TODO',
-  payload: todo,
+  payload: todoID,
 })
 
-export const resetTodos: () => ResetTodosAction = () => ({
+export const resetTodos = (): Action => ({
   type: 'RESET_TODOS',
 })
