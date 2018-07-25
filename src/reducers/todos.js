@@ -1,7 +1,7 @@
 // @flow
 import { List } from 'immutable'
 import type { TodoType, Predicate } from 'components/TodoList'
-import type { Action, Reducer, TodoState } from 'actions/types'
+import type { TodoAction, Reducer, TodoState } from 'actions/types'
 
 const initialState: TodoState = new List()
 
@@ -38,7 +38,7 @@ const removeSelected = ({ payload }: *): FilterTodo => todo => (
   todo.id !== payload
 )
 
-const todosReducer: Reducer<TodoState, Action> =
+const todosReducer: Reducer<TodoState, TodoAction> =
   (state = initialState, action) => {
     switch (action.type) {
       case 'ADDED_TODO':

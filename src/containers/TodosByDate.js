@@ -1,15 +1,17 @@
 // @flow
+import React from 'react'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import compose from 'lodash/fp/compose'
 import TodoList from 'components/TodoList'
 import type { TodoListProps } from 'components/TodoList'
+import SelectDates from 'containers/SelectDates'
 import { addTodo, removeTodo, completeTodo, resetTodos } from 'actions/todos'
 import type { TodoAction, Dispatch } from 'actions/types'
-import { makeSelectTodos } from 'selectors/todos'
+import { makeSelectFilteredTodos } from 'selectors/todos'
 
 const mapStateToProps = createStructuredSelector({
-  todos: makeSelectTodos(),
+  todos: makeSelectFilteredTodos(),
 })
 
 type MapDispatchToProps = (dispatch: Dispatch<TodoAction>) => ($Rest<TodoListProps, {| todos: $PropertyType<TodoListProps, 'todos'> |}>)
@@ -23,12 +25,12 @@ const mapDispatchToProps: MapDispatchToProps = dispatch => ({
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps)
 
-export default withConnect(TodoList)
+const FilteredTodos = withConnect(TodoList)
 
-/**
- * [Flow]
- *  dispatch: Dispatch < ({ | type: "RESET_TODOS" |}
- *   | {| payload: TodoType, type: "COMPLETED_TODO" |}
- *   | {| payload: TodoType, type: "ADDED_TODO" |}
- *   | {| payload: string, type: "REMOVED_TODO" |}>
- */
+const TodosWithDateForm = () => (
+  <SelectDates>
+    <FilteredTodos />
+  </SelectDates>
+)
+
+export default TodosWithDateForm

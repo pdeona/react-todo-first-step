@@ -39,6 +39,7 @@
     "ip": "1.1.5",
     "lodash": "^4.17.10",
     "react": "^16.4.0",
+    "react-day-picker": "^7.1.10",
     "react-dom": "^16.4.0",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",

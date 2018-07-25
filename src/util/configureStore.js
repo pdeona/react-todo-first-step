@@ -3,15 +3,9 @@
  */
 // @flow
 import { createStore, applyMiddleware, compose } from 'redux'
-import { combineReducers } from 'redux-immutable'
-import { Record, List } from 'immutable'
 // import createSagaMiddleware from 'redux-saga'
 import logger from 'redux-logger'
-import todosReducer from 'reducers/todos'
-
-const InitialState = Record({
-  todos: new List(),
-})
+import rootReducer from 'reducers'
 
 // type AppStore = {
 //   ...$ReadOnly<$Call<typeof createStore, Object, Object>>,
@@ -19,7 +13,7 @@ const InitialState = Record({
 // }
 
 // const sagaMiddleware = createSagaMiddleware()
-export default function configureStore(initialState: Object = {}) {
+export default function configureStore() {
   // Store middleware:
   //   - sagaMiddleware: Makes redux-sagas work
   const middlewares = [
@@ -47,27 +41,18 @@ export default function configureStore(initialState: Object = {}) {
       })
       : compose
   /* eslint-enable */
-  const injectedReducers = {
-    todos: todosReducer,
-  }
 
   const store = createStore(
-    combineReducers(injectedReducers),
-    new InitialState(initialState),
+    rootReducer,
     composeEnhancers(...enhancers)
   )
-
-  // Extensions
-  // store.runSaga = sagaMiddleware.run
-  store.injectedReducers = injectedReducers // Reducer registry
-  store.injectedSagas = {} // Saga registry
 
   // Make reducers hot reloadable, see http://mxs.is/googmo
   /* istanbul ignore next */
   // $FlowIssue webpack adds module.hot for us in development
   if (module.hot) {
-    module.hot.accept('../reducers/todos', () => {
-      store.replaceReducer(combineReducers(store.injectedReducers))
+    module.hot.accept('../reducers', () => {
+      store.replaceReducer(rootReducer)
     })
   }
 

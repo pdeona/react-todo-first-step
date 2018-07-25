@@ -1,6 +1,6 @@
 // @flow
 import type { TodoType } from 'components/TodoList'
-import type { Action } from './types'
+import type { TodoAction as Action } from './types'
 
 export const addTodo = (todo: TodoType): Action => ({
   type: 'ADDED_TODO',

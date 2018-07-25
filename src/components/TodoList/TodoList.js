@@ -49,7 +49,6 @@ class TodoList extends PureComponent<TodoListProps> {
 
   render() {
     const { todos, onResetTodos } = this.props
-
     return (
       <div className="todo-container">
         <NewTodoForm onSubmit={this.onSubmitTodo} />
