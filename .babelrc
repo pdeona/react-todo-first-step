@@ -7,12 +7,22 @@
       }
     ],
     "react",
+    "flow",
     "stage-0"
   ],
   "env": {
+    "development": {
+      "plugins": [
+        "babel-plugin-transform-decorators-legacy",
+        "transform-react-remove-prop-types",
+        "transform-react-constant-elements",
+        "transform-react-inline-elements"
+      ]
+    },
     "production": {
       "only": ["src"],
       "plugins": [
+        "babel-plugin-transform-decorators-legacy",
         "transform-react-remove-prop-types",
         "transform-react-constant-elements",
         "transform-react-inline-elements"
@@ -20,6 +30,7 @@
     },
     "test": {
       "plugins": [
+        "babel-plugin-transform-decorators-legacy",
         "transform-es2015-modules-commonjs",
         "dynamic-import-node"
       ]

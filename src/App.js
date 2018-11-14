@@ -1,15 +1,13 @@
 // @flow
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
+import { observable, action, computed } from 'mobx'
+import { observer } from 'mobx-react'
 import TodoList from 'components/TodoList'
-import type { TodoType } from 'components/TodoList'
+import type { TodoItem } from 'components/TodoList'
 import './App.css'
 
-type AppState = {|
-  todos: Array<TodoType>
-|}
-
 type Updater<T> = (item: T) => T
-type TodoUpdater = Updater<TodoType>
+type TodoUpdater = Updater<TodoItem>
 
 const flipCompleted: TodoUpdater = item => ({
   id: item.id,
@@ -18,50 +16,55 @@ const flipCompleted: TodoUpdater = item => ({
 })
 
 type Predicate<T> = (item: T) => boolean
-const count = <K>(list: Array<K>, predicate: Predicate<K>): number => list.reduce(
-  (acc, item: K): number => (predicate(item) ? acc + 1 : acc),
-  0,
-)
+type Count<T: TodoItem> = (list: T[], predicate: Predicate<T>) => number
+const count: Count<TodoItem> = (list, predicate) => list
+  .reduce(
+    (acc, item) => (predicate(item) ? acc + 1 : acc),
+    0,
+  )
 
-class App extends PureComponent<any, AppState> {
-  state: AppState = {
-    todos: [],
+@observer
+class App extends Component<*> {
+  @observable todos: TodoItem[] = [] // eslint-disable-line react/sort-comp
+
+  @action addTodo = (todo: TodoItem): void => {
+    this.todos = this.todos.concat(todo)
   }
 
-  addTodo = (todo: TodoType): void => this.setState(state => ({
-    todos: state.todos.concat(todo),
-  }))
+  @action removeTodo = (todoID: number): void => {
+    this.todos = this.todos
+      .filter((todo: TodoItem): boolean => todo.id !== todoID)
+  }
 
-  removeTodo = (todoID: number): void => this.setState(state => ({
-    todos: state.todos.filter((todo: TodoType): boolean => todo.id !== todoID)
-  }))
-
-  completeTodo = (todo: TodoType): void => {
+  @action completeTodo = (todo: TodoItem): void => {
     const updateTodos: TodoUpdater = existing => (existing.id === todo.id
       ? flipCompleted(existing)
       : existing)
-    const newTodosState: (state: AppState) => AppState = state => ({
-      todos: state.todos.map(updateTodos)
-    })
 
-    this.setState(newTodosState)
+    this.todos = this.todos.map(updateTodos)
+  }
+
+  @computed get totalTodos(): number {
+    return this.todos.length
+  }
+
+  @computed get completedTodos(): number {
+    return count(this.todos, todo => todo.completed)
   }
 
   render() {
-    const { todos } = this.state
-
     return (
       <div className="App">
         <TodoList
-          todos={todos}
+          todos={this.todos}
           onAddTodo={this.addTodo}
           onRemoveTodo={this.removeTodo}
           onCompleteTodo={this.completeTodo}
         />
         <span className="status-text">
-          Total: {todos.length}
+          Total: {this.totalTodos}
           <br />
-          Completed: {count(todos, (todo: TodoType): boolean => !!todo.completed)}
+          Completed: {this.completedTodos}
         </span>
       </div>
     )

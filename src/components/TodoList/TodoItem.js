@@ -1,14 +1,14 @@
 // @flow
 import React from 'react'
 
-type TodoType = {|
+type TodoItem = {|
   id: number,
   text: string,
   completed: boolean,
 |}
 
 type TodoProps = {|
-  todo: TodoType,
+  todo: TodoItem,
   onCompleted: () => void,
   onRemove: () => void,
 |}
@@ -24,5 +24,5 @@ const Todo = ({ todo, onCompleted, onRemove }: TodoProps) => (
   </div>
 )
 
-export type { TodoType }
+export type { TodoItem }
 export default Todo

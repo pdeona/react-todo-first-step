@@ -4,18 +4,18 @@ import type { Element } from 'react'
 import compose from 'lodash/fp/compose'
 import NewTodoForm from './TodoForm'
 import Todo from './TodoItem'
-import type { TodoType } from './TodoItem'
+import type { TodoItem } from './TodoItem'
 // $FlowIssue For some reason scss import is messing up flow type
 import './style.scss'
 
 type TodoListProps = {|
-  todos: Array<TodoType>,
-  onAddTodo: (todo: TodoType) => void,
+  todos: Array<TodoItem>,
+  onAddTodo: (todo: TodoItem) => void,
   onRemoveTodo: (todoID: number) => void,
-  onCompleteTodo: (todo: TodoType) => void,
+  onCompleteTodo: (todo: TodoItem) => void,
 |}
 
-const newTodo = (text: string): TodoType => ({
+const newTodo = (text: string): TodoItem => ({
   id: new Date().getTime(),
   text,
   completed: false,
@@ -26,9 +26,9 @@ class TodoList extends PureComponent<TodoListProps> {
 
   onRemoveTodo = (todoID: number) => () => this.props.onRemoveTodo(todoID)
 
-  onCompleteTodo = (todo: TodoType) => () => this.props.onCompleteTodo(todo)
+  onCompleteTodo = (todo: TodoItem) => () => this.props.onCompleteTodo(todo)
 
-  renderTodos = (todos: Array<TodoType>): Array<Element<typeof Todo>> =>
+  renderTodos = (todos: Array<TodoItem>): Array<Element<typeof Todo>> =>
     todos.map(todo => (
       <Todo
         key={todo.id}
